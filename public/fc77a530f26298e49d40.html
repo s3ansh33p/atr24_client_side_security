@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cognitech Labs Inbox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .b-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+            width: 1.5rem;
+            flex-shrink: 0;
+            height: 100vh;
+        }
+
+        .active {
+            background-color: red;
+            border-color: red;
+            color: white;
+        }
+
+        .sidebar {
+            width: 100%;
+        }
+
+        .email-content {
+            padding-top: 70px;
+        }
+
+        @media (min-width: 768px) {
+            .sidebar {
+                width: 350px;
+            }
+
+            #mobile-toggle {
+                display: none!important;
+            }
+
+            .email-content {
+                padding-top: 0;
+            }
+        }
+
+        .navbar-toggler-icon {
+            --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap vh-100">
+
+        <!-- MOBILE -->
+        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar position-absolute z-2" id="mobile-toggle">
+            <span class="d-flex align-items-center flex-shrink-0 p-3 text-decoration-none border-bottom">
+                <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation" onclick="togglePreviews()">
+                    <span class="navbar-toggler-icon me-2"></span>
+                  </button>
+                <span class="fs-5 fw-semibold">Cognitech Labs Inbox</span>
+            </span>
+        </div>
+
+        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary sidebar" id="email-previews">
+            <span
+                class="d-flex align-items-center flex-shrink-0 p-3 text-decoration-none border-bottom">
+                <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon me-2"></span>
+                  </button>
+                <span class="fs-5 fw-semibold">Cognitech Labs Inbox</span>
+            </span>
+            <div class="list-group list-group-flush border-bottom scrollarea overflow-y-scroll" id="previews"></div>
+        </div>
+        <div class="b-divider"></div>
+        <div class="d-flex flex-column w-100 container email-content">
+            <header class="d-flex align-items-center pb-3 border-bottom">
+                <a href="/" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <h1 class="mt-3" id="email-subject"></span>
+                </a>
+            </header>
+
+            <h5 id="email-sender" class="mt-3"></h5>
+            <p class="d-flex justify-content-between w-100">
+                <span>
+                    <span>To: </span>
+                    <span id="email-recipients">[Recipient];</span>
+                </span>
+
+                <span class="me-2">
+                    <span id="email-day"></span>
+                    <span id="email-date"></span>
+                    <span id="email-time"></span>
+                </span>
+            </p>
+            <p id="email-body">[Body] </p>
+        </div>
+
+        <div class="b-divider b-vr"></div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script>
+        const contacts = [
+            {
+                'id': 0,
+                'name': 'Ada Lovecode',
+                'email': 'ada@cognitech-labs.org.au'
+            },
+            {
+                'id': 1,
+                'name': 'Bill Gatekeeper',
+                'email': 'billiamgatekeeperisthebestchiefsecurityofficer@cognitech-labs.org.au'
+            }
+        ]
+        const emails = [
+            {
+                'date': '2033-11-12T08:43:21.000Z',
+                'subject': 'Financial Support Discussion',
+                'sender': 1,
+                'recipients': [0],
+                'body': `Dear Ada,
+
+                I hope you're well. I've noticed irregular financial transactions related to your recent requests for funds. To maintain financial stability and transparency at Cognitech Labs, I'd like to discuss this matter with you.
+
+                Could we schedule a meeting soon to address these concerns and find a suitable solution?
+
+                Thank you for your attention to this matter.
+
+                Best regards,
+
+                Bill Gatekeeper
+                Chief Security Officer, Cognitech Labs`,
+                'attachments': []
+            },
+            {
+                'date': '2033-11-13T03:51:01.000Z',
+                'subject': 'Re: Financial Support Discussion',
+                'sender': 0,
+                'recipients': [1],
+                'body': `Hi Bill,
+
+                Thanks for reaching out! 🙌 I've checked the money stuff you mentioned, and it was a one-off oopsie. 🙈 No need for a meeting this time; we're all good now. 👌
+
+                Don't worry 😊
+
+                Best,
+                Ada`,
+                'attachments': []
+            },
+            {
+                'date': '2033-12-17T04:39:33.000Z',
+                'subject': 'Concerns Regarding Recent Financial Transactions',
+                'sender': 0,
+                'recipients': [1],
+                'body': `Dear Ada,
+
+                I hope you're doing well. I wanted to discuss another incident related to the recent financial transactions. It seems there's been another misuse of funds, and I think it's crucial for us to address this matter promptly.
+
+                Could we schedule a brief meeting to discuss these concerns and find a solution to ensure responsible handling of company finances?
+
+                Thank you for your attention to this important issue.
+
+                Best regards,
+                Bill`,
+                'attachments': []
+            },
+            {
+                'date': '2033-12-18T09:22:08.000Z',
+                'subject': '',
+                'sender': 1,
+                'recipients': [0],
+                'body': `Hi Bill,
+
+                Thanks for letting me know. I'll make sure this doesn't happen again. 🙏💼
+
+                Best,
+                Ada`,
+                'attachments': []
+            },
+            {
+                'date': '2033-11-12T08:43:21.000Z',
+                'subject': '',
+                'sender': 0,
+                'recipients': [1],
+                'body': ``,
+                'attachments': []
+            },
+            {
+                'date': '2033-11-12T08:43:21.000Z',
+                'subject': '',
+                'sender': 0,
+                'recipients': [1],
+                'body': ``,
+                'attachments': []
+            },
+        ]
+
+        function renderEmail(id) {
+
+            // set url
+            window.history.pushState({}, null, `?email=${id}`);
+
+            const emailPreview = document.getElementById("email-" + id);
+            const emailRecipients = document.getElementById("email-recipients");
+            const emailSender = document.getElementById("email-sender");
+            const emailDay = document.getElementById("email-day");
+            const emailDate = document.getElementById("email-date");
+            const emailTime = document.getElementById("email-time");
+            const emailBody = document.getElementById("email-body");
+            const emailSubject = document.getElementById("email-subject");
+
+            const email = emails[id];
+
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const emailDateObject = new Date(email.date)
+
+            let finalBody = "";
+            let splits = email.body.trim().split("\n");
+            for (let i = 0; i < splits.length; i++) {
+                finalBody += splits[i] + "<br>";
+            }
+
+            let recipientsHTML = "";
+            let recipientsLength = email.recipients.length;
+            for (let i = 0; i < recipientsLength; i++) {
+                const recipient = contacts[email.recipients[i]];
+                recipientsHTML += `<span type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${recipient.email}">${recipient.name}</span>`;
+                if ((i + 1) < recipientsLength) {
+                    recipientsHTML += "; ";
+                }
+            }
+
+            let oldPreview = document.querySelectorAll("a.active")[0];
+            if (oldPreview) oldPreview.classList.remove("active");
+
+            emailPreview.classList.add("active");
+            emailBody.innerHTML = finalBody;
+            emailSubject.innerText = email.subject;
+            emailDate.innerText = emailDateObject.toLocaleDateString();
+            emailTime.innerText = emailDateObject.toLocaleTimeString();
+            emailDay.innerText = days[emailDateObject.getDay()];
+            emailSender.innerText = `${contacts[email.sender].name} <${contacts[email.sender].email}>`;
+            emailRecipients.innerHTML = recipientsHTML;
+
+            const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            for (let i = 0; i < recipientsLength; i++) { 
+                new bootstrap.Tooltip(tooltips[i]) 
+                // You'll need this: https://www.cs.du.edu/~snarayan/crypt/vigenere.html
+            }
+            
+
+        }
+
+        function createEmail(email, id) {
+            const trimmedBody = email.body.replace(/<[^>]*>?/gm, '').replace(/\n/g, '').replace(/\s\s+/g, ' ').replace(/&nbsp;/g, ' ').substring(0, 100);
+            const template = `<a href="#" class="list-group-item list-group-item-action py-3 lh-sm" id="email-${id}" onclick="renderEmail(${id})">
+                <span class="pb-1 me-2 text-truncate d-block">${contacts[email.sender].name} - ${contacts[email.sender].email}</span>
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                <span class="pb-1 me-2 text-truncate">${email.subject}</span>
+                <small>${new Date(email.date).toLocaleDateString()}</small>
+                </div>
+                <div class="col-10 pb-1 small text-truncate">${trimmedBody}</div>
+            </a>`;
+            document.getElementById("previews").innerHTML += template;
+        }
+
+        function togglePreviews() {
+            const element = document.getElementById("email-previews");
+            if (element.classList.contains("d-flex")) {
+                element.classList.remove("d-flex");
+                element.classList.add("d-none");
+            } else {
+                element.classList.add("d-flex");
+                element.classList.remove("d-none");
+            }
+        }
+
+        for (let i = emails.length - 1 ; i >= 0; i--) {
+            createEmail(emails[i], i);
+        }
+
+        // get ?email=id from url
+        let success = false;
+        if (window.location.search) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const emailId = urlParams.get('email');
+            if (emailId) {
+                renderEmail(emailId);
+                success = true;
+            }   
+        }
+        if (!success) renderEmail(emails.length - 1);
+       
+
+    </script>
+
+
+</body>
+
+</html>
